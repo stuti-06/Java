@@ -1,27 +1,27 @@
-# Use a base image with Java pre-installed (e.g., OpenJDK)
-FROM openjdk:11-jre-slim
+# Step 1: Use a Maven image to build the application
+FROM maven:3.8.1-openjdk-11-slim AS build
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy your Java source file from GitHub (or local directory) into the container
-COPY addition.java /app/addition.java
+# Copy your pom.xml and the source code to the container
+COPY pom.xml /app/
+COPY src /app/src/
 
-# Compile the Java file to produce a .class file
-RUN javac addition.java
+# Build the application and create a JAR file
+RUN mvn clean package -DskipTests
 
-# Create a simple Jar file (if needed, you can skip this if it's a simple class app)
-RUN echo "Main-Class: addition" > manifest.txt && jar cfm addition.jar manifest.txt addition.class
+# Step 2: Use an OpenJDK image to run the application
+FROM openjdk:11-jre-slim
 
-# Now, copy the JAR file into a Tomcat image if necessary
-# You can use another Tomcat image if needed
-FROM tomcat:9.0
+# Set the working directory in the container
+WORKDIR /app
 
-# Copy the compiled JAR/WAR file to the Tomcat webapps directory
-COPY --from=0 /app/addition.jar /usr/local/tomcat/webapps/yourapp.war
+# Copy the JAR file created in the previous step to the container
+COPY --from=build /app/target/addition-1.0-SNAPSHOT.jar /app/addition.jar
 
-# Expose the port for Tomcat
+# Expose the port (optional, if you need to expose it)
 EXPOSE 8080
 
-# Start Tomcat
-CMD ["catalina.sh", "run"]
+# Command to run the JAR file
+CMD ["java", "-jar", "addition.jar"]
