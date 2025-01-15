@@ -14,15 +14,13 @@ pipeline {
             } 
         } 
       
-        stage('SonarQube Analysis') { 
+         stage('SonarQube Analysis') { 
             steps { 
-                withSonarQubeEnv('SonarQube Server') { 
-                    // Directly using the token (NOT recommended for security reasons)
-                    sh 'mvn sonar:sonar -Dsonar.login="squ_69f7d3d1ec22e8a85bcce1a11e7e72cba5555c9b"'
-                }
+                withSonarQubeEnv(SONARQUBE_SERVER) { 
+                    sh 'mvn sonar:sonar' 
+                } 
             } 
-        }
-
+        } 
 
         stage('Build WAR File') { 
             steps { 
