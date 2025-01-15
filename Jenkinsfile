@@ -2,7 +2,7 @@ pipeline {
     agent any 
     
     environment { 
-        SONARQUBE_SERVER = 'SonarQube Scanner'  // Name of your SonarQube server in Jenkins 
+        SONARQUBE_SERVER = 'SQ'  // Name of your SonarQube server in Jenkins 
         DOCKER_IMAGE = 'addition:latest' // Replace with your desired image name  
         IMAGE_TAG = 'latest' 
         IMAGE_NAME = 'sum' // Image name 
