@@ -2,7 +2,6 @@ pipeline {
     agent any 
     
     environment { 
-        SONARQUBE_SERVER = 'SQ'  // Name of your SonarQube server in Jenkins 
         DOCKER_IMAGE = 'addition:latest' // Replace with your desired image name  
         IMAGE_TAG = 'latest' 
         IMAGE_NAME = 'sum' // Image name 
@@ -17,11 +16,13 @@ pipeline {
       
         stage('SonarQube Analysis') { 
             steps { 
-                withSonarQubeEnv(SONARQUBE_SERVER) { 
-                    sh 'mvn sonar:sonar' 
-                } 
+                withSonarQubeEnv('SonarQube Server') { 
+                    // Directly using the token (NOT recommended for security reasons)
+                    sh 'mvn sonar:sonar -Dsonar.login="squ_69f7d3d1ec22e8a85bcce1a11e7e72cba5555c9b"'
+                }
             } 
-        } 
+        }
+
 
         stage('Build WAR File') { 
             steps { 
