@@ -5,7 +5,7 @@ FROM tomcat:9.0
 COPY target/addition-1.0.war /usr/local/tomcat/webapps/ 
 
 # Expose Tomcat's default HTTP port 
-EXPOSE 8081
+EXPOSE 8080
 
 # Start Tomcat 
 CMD ["catalina.sh", "run"] 
